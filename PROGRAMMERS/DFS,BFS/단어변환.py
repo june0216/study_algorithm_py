@@ -1,5 +1,5 @@
-    from collections import deque
-    def solution(begin, target, words):
+from collections import deque
+def solution(begin, target, words):
         answer = 0
         route = []
         cnt = 0
