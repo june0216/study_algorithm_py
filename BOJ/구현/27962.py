@@ -1,24 +1,20 @@
 import sys
-
+input = sys.stdin.readline
 n = int(input())
 s = input().strip()
 
-if n == 1:
-    print("NO")
-    sys.exit(0)
+for length in range(1, n):
+    # 시작부분과 끝부분 문자열 선택
+    front = s[:length]
+    back = s[-length:]
 
-for i in range(1, n):
-    window1 = s[:i]
-    l = len(window1)
-    window2 = s[n-l:n]
-    if window2[0] == window1[0] or window1[-1] == window2[-1]:
-        diff = 0
-        for j in range(l):
-            if window1[j] != window2[j]:
-                diff += 1
-            # 정확히 한 문자만 다르다면 비타민 문자열
-        if diff == 1:
-            print("YES")
-            sys.exit(0)
+    # 두 문자열에서 다른 문자의 개수 계산
+    diff = sum(a != b for a, b in zip(front, back))
+
+    # 다른 문자가 정확히 하나라면 '비타민 문자열'
+    if diff == 1:
+        print("YES")
+        sys.exit(0)
+
 
 print("NO")
