@@ -1,40 +1,43 @@
-#톱니를 돌린다는 점에서 deque 자료구조
-import collections
-cycle = []
-for i in range(4):
-    cycle.append(collections.deque(list(input())))
-total = int(input())
-command = [list(map(int, input().split())) for _ in range(total)]
+from collections import deque
+def right(idx, d): # 오른쪽 톱니바퀴 확인
 
-def right(idx, direct):
-    if idx >3:
+    if idx > 3:
         return
-    if cycle[idx][6] != cycle[idx-1][2]:
-        right(idx+1, -direct)
-        cycle[idx].rotate(direct)
 
-def left(idx, direct):
+    if sawtooth[idx - 1][2] != sawtooth[idx][6]:
+        right(idx + 1, -d)
+        sawtooth[idx].rotate(d)
+
+
+def left(idx, d):
+
     if idx < 0:
         return
-    if cycle[idx][2] != cycle[idx+1][6]:
-        left(num-1, -direct)
-        cycle[idx].rotate(direct)
 
-for i in range(total):
-    num = command[i][0] - 1
-    direct = command[i][1]
-    left(num - 1, -direct)
-    right(num+1, -direct)
-    cycle[num].rotate(direct)
+    if sawtooth[idx][2] != sawtooth[idx + 1][6]:
+        left(idx - 1, -d)
+        sawtooth[idx].rotate(d)
 
 
-res = 0
-if cycle[0][0] == '1':
-    res+=1
-if cycle[1][0] == '1':
-	res+=2
-if cycle[2][0] == '1':
-	res+=4
-if cycle[3][0] =='1':
-	res+=8
-print(res)
+
+sawtooth = [deque(list(map(int, input()))) for _ in range(4)]
+k = int(input())
+
+for _ in range(k):
+
+    idx, d = map(int, input().split())
+    idx -= 1
+
+    left(idx - 1, -d)
+    right(idx + 1, -d)
+
+    sawtooth[idx].rotate(d)
+
+
+
+score = 0
+for i in range(4):
+    if sawtooth[i][0] == 1:
+        score += 2 ** i
+
+print(score)
