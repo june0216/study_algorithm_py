@@ -1,27 +1,23 @@
-import sys
+#최소 비용인데 길이가 정해져있음
 import heapq
-input = sys.stdin.readline
-
-N, M = map(int, input().split())
-G = [[] for _ in range(N+1)]
-for _ in range(M):
-    a, b, c = map(int, input().split())
-    G[a].append((b, c))
-    G[b].append((a, c))
-
-MAX_VAL = sys.maxsize
-V = [MAX_VAL] * (N+1)
-H = []
-# 여물수, 위치
-heapq.heappush(H, (0, 1))
-while H:
-    c, v = heapq.heappop(H)
-    if v == N:
-        print(c)
+import sys
+INF = sys.maxsize
+node_num, path_num = map(int, input().split())
+info = [[] for _ in range(node_num+1)]
+for _ in range(path_num):
+    u, v, w = map(int, input().split())
+    info[u].append((w, v))
+    info[v].append((w, u))
+que = []
+min_val = [INF] * (node_num + 1)
+heapq.heappush(que, (0, 1))
+while que:
+    weight , node = heapq.heappop(que)
+    if node == node_num:
+        print(weight)
         break
+    for next_weight, next_node in info[node]:
+        if min_val[next_node] > next_weight + weight:
+            min_val[next_node] = next_weight + weight
+            heapq.heappush(que, (next_weight+weight, next_node))
 
-    for next_v, next_c in G[v]:
-        total_c = c + next_c
-        if V[next_v] > total_c:
-            V[next_v] = total_c
-            heapq.heappush(H, (total_c, next_v))

@@ -1,32 +1,38 @@
-# [G3] 최소비용 구하기 2
-import sys
+#가중치가 1이상이므로 다익스트라
 import heapq
-input = sys.stdin.readline
-
-n = int(input())
-m = int(input())
-G = [[] for _ in range(n+1)]
-for _ in range(m):
-    a, b, c = map(int, input().split())
-    G[a].append((c, b))
-for i in G:
-    i.sort()
-s, e = map(int, input().split())
-H = [(0 ,s)]
+import sys
 INF = sys.maxsize
-V = [INF] * (n+1)
-V[s] = 0
-D = [[] for _ in range(n+1)]
-D[s].append(s)
-while H:
-    c, v = heapq.heappop(H)
-    if v == e:
+city_num = int(input())
+bus_num = int(input())
+
+min_val = [INF] * (city_num+1)
+
+input_num = [[] for _ in range(city_num+1)]
+
+
+for _ in range(bus_num):
+    u, v, w = map(int, input().split())
+    input_num[u].append((w, v))
+start, end = map(int, input().split())
+
+min_val[start] = 0
+que = []
+result = [[] for _ in range(city_num+1)] #경로 저장용
+result[start].append(start)
+heapq.heappush(que, (0, start))
+for i in input_num:
+    i.sort()
+
+while que:
+    com_weigth, com_node = heapq.heappop(que)
+    if com_node == end:
         break
-    for mon, nxt in G[v]:
-        if V[nxt] > c+mon:
-            V[nxt] = c+mon
-            D[nxt] = D[v]+[nxt]
-            heapq.heappush(H, (c+mon, nxt))
-print(c)
-print(len(D[v]))
-print(*D[v])
+    for weight, node in input_num[com_node]:
+        if weight+com_weigth < min_val[node]:
+            min_val[node] = weight + com_weigth
+            result[node] = result[com_node] + [node]
+            heapq.heappush(que, (com_weigth+weight, node))
+print(com_weigth)
+print(len(result[com_node]))
+print(*result[com_node])
+
