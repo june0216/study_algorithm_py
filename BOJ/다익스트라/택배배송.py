@@ -13,6 +13,8 @@ min_val = [INF] * (node_num + 1)
 heapq.heappush(que, (0, 1))
 while que:
     weight , node = heapq.heappop(que)
+    if min_val[node] < weight: #이미 더 짧은 경로를 통해 처리된 노드를 다시 처리하지 않도록 하여 알고리즘의 효율성을 높이는 역할 + 방문 노드 검사
+        continue
     if node == node_num:
         print(weight)
         break
