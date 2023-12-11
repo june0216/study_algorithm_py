@@ -5,8 +5,7 @@ table = []
 for _ in range(n):
     table.append(list(map(int, input().split())))
 
-dp = [[0]* (n+1) for _ in range(3)]
-for i in range(n): #집
+for i in range(1, n): #집
     table[i][0] += min(table[i-1][1], table[i-1][2])
     table[i][1] += min(table[i - 1][0], table[i - 1][2])
     table[i][2] += min(table[i - 1][0], table[i - 1][1])
